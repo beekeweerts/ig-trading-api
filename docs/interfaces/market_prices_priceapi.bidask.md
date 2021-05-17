@@ -18,7 +18,7 @@
 
 • **ask**: _number_
 
-Defined in: [market/prices/PriceAPI.ts:6](https://github.com/bennycode/ig-trading-api/blob/840a401/src/market/prices/PriceAPI.ts#L6)
+Defined in: [market/prices/PriceAPI.ts:6](https://github.com/bennycode/ig-trading-api/blob/362f41a/src/market/prices/PriceAPI.ts#L6)
 
 ---
 
@@ -26,12 +26,12 @@ Defined in: [market/prices/PriceAPI.ts:6](https://github.com/bennycode/ig-tradin
 
 • **bid**: _number_
 
-Defined in: [market/prices/PriceAPI.ts:7](https://github.com/bennycode/ig-trading-api/blob/840a401/src/market/prices/PriceAPI.ts#L7)
+Defined in: [market/prices/PriceAPI.ts:7](https://github.com/bennycode/ig-trading-api/blob/362f41a/src/market/prices/PriceAPI.ts#L7)
 
 ---
 
 ### lastTraded
 
-• **lastTraded**: _null_ \| _number_
+• **lastTraded**: `null` \| _number_
 
-Defined in: [market/prices/PriceAPI.ts:8](https://github.com/bennycode/ig-trading-api/blob/840a401/src/market/prices/PriceAPI.ts#L8)
+Defined in: [market/prices/PriceAPI.ts:8](https://github.com/bennycode/ig-trading-api/blob/362f41a/src/market/prices/PriceAPI.ts#L8)

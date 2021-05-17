@@ -1,20 +1,21 @@
 import nock from 'nock';
 import {APIClient} from '../APIClient';
 import {
-  DealingAPI,
-  PositionCreateRequest,
-  PositionCloseRequest,
-  PositionUpdateRequest,
-  DealReferenceResponse,
-  OrderCreateRequest,
-  OrderUpdateRequest,
-  Direction,
-  PositionOrderType,
-  DealStatus,
   AffectedDealStatus,
+  DealingAPI,
+  DealReferenceResponse,
+  DealStatus,
+  Direction,
+  OrderCreateRequest,
   OrderTimeInForce,
   OrderType,
+  OrderUpdateRequest,
+  PositionCloseRequest,
+  PositionCreateRequest,
+  PositionOrderType,
+  PositionUpdateRequest,
 } from './DealingAPI';
+import {LoginAPI} from '../login';
 
 describe('DealingAPI', () => {
   describe('getAllOpenPositions', () => {
@@ -368,6 +369,147 @@ describe('DealingAPI', () => {
       const deleteOrder = await global.client.rest.dealing.deleteOrder(dealId);
       expect(deleteOrder.dealReference).toBe('54321');
     });
+
+    it('fails to delete an order', async () => {
+      const dealId = '12345';
+
+      nock(APIClient.URL_DEMO)
+        .post(
+          DealingAPI.URL.WORKINGORDERS_OTC + dealId,
+          {},
+          {
+            reqheaders: {
+              _method: 'DELETE',
+            },
+          }
+        )
+        .reply(403);
+
+      global.client.rest.defaults['axios-retry'] = {
+        retries: 1,
+      };
+      await expectAsync(global.client.rest.dealing.deleteOrder(dealId)).toBeRejected();
+    });
+
+    it('retries when being rate limited', async () => {
+      const dealId = '12345';
+
+      nock(APIClient.URL_DEMO)
+        .post(
+          DealingAPI.URL.WORKINGORDERS_OTC + dealId,
+          {},
+          {
+            reqheaders: {
+              _method: 'DELETE',
+            },
+          }
+        )
+        .reply(
+          403,
+          JSON.stringify({
+            errorCode: 'error.public-api.exceeded-api-key-allowance',
+          })
+        );
+
+      const amountOfRetries = 2;
+
+      global.client.rest.defaults['axios-retry'] = {
+        retries: amountOfRetries,
+      };
+
+      try {
+        await global.client.rest.dealing.deleteOrder(dealId);
+        fail('Expected error');
+      } catch (error) {
+        expect(error.isAxiosError).toBe(true);
+        expect(error.config['axios-retry'].retryCount).toBe(amountOfRetries);
+      }
+    }, 10_000);
+
+    it('tries to init a trading session when no session was created', async () => {
+      const dealId = '12345';
+
+      nock(APIClient.URL_DEMO)
+        .post(
+          DealingAPI.URL.WORKINGORDERS_OTC + dealId,
+          {},
+          {
+            reqheaders: {
+              _method: 'DELETE',
+            },
+          }
+        )
+        .reply(
+          401,
+          JSON.stringify({
+            errorCode: 'error.security.client-token-missing',
+          })
+        );
+
+      const amountOfRetries = 0;
+
+      const apiClient = new APIClient(APIClient.URL_DEMO, {
+        apiKey: 'local-demo-api-key',
+        password: 'local-demo-password',
+        username: 'local-demo-username',
+      });
+
+      apiClient.rest.defaults['axios-retry'] = {
+        retries: amountOfRetries,
+      };
+
+      const createSession = spyOn<LoginAPI>(apiClient.rest.login, 'createSession').and.callFake(() => {});
+
+      try {
+        await apiClient.rest.dealing.deleteOrder(dealId);
+        fail('Expected error');
+      } catch (error) {
+        expect(createSession).toHaveBeenCalledTimes(1);
+      }
+    });
+
+    it('fails to automatically init a trading session if username and password are not supplied', async () => {
+      const dealId = '12345';
+
+      nock(APIClient.URL_DEMO)
+        .post(
+          DealingAPI.URL.WORKINGORDERS_OTC + dealId,
+          {},
+          {
+            reqheaders: {
+              _method: 'DELETE',
+            },
+          }
+        )
+        .reply(
+          401,
+          JSON.stringify({
+            errorCode: 'error.security.client-token-missing',
+          })
+        );
+
+      const amountOfRetries = 0;
+
+      const apiClient = new APIClient(APIClient.URL_DEMO, {
+        apiKey: 'local-demo-api-key',
+      });
+
+      apiClient.rest.defaults['axios-retry'] = {
+        retries: amountOfRetries,
+      };
+
+      const createSession = spyOn<LoginAPI>(apiClient.rest.login, 'createSession').and.callFake(() => {});
+
+      try {
+        await apiClient.rest.dealing.deleteOrder(dealId);
+        fail('Expected error');
+      } catch (error) {
+        expect(createSession).not.toHaveBeenCalled();
+        expect(error.message).toBe(
+          'Cannot fulfill request because there is no active session and username & password have not been provided.'
+        );
+      }
+    });
   });
 
   describe('updateOrder', () => {
@@ -394,26 +536,6 @@ describe('DealingAPI', () => {
 
       const updateOrder = await global.client.rest.dealing.updateOrder(dealId, updateOrderRequest);
       expect(updateOrder.dealReference).toBe('54321');
-    });
-  });
-
-  describe('failedDelete', () => {
-    xit('fails to delete an order', async () => {
-      const dealId = '12345';
-
-      nock(APIClient.URL_DEMO)
-        .post(
-          DealingAPI.URL.WORKINGORDERS_OTC + dealId,
-          {},
-          {
-            reqheaders: {
-              _method: 'DELETE',
-            },
-          }
-        )
-        .reply(403);
-
-      await expectAsync(global.client.rest.dealing.deleteOrder(dealId)).toBeRejected();
     });
   });
 });

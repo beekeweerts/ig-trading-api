@@ -1,4 +1,5 @@
-import {AxiosInstance} from 'axios';
+import axios, {AxiosInstance} from 'axios';
+import {APIClient} from '../APIClient';
 import {Authorization} from '../client';
 
 export interface OauthToken {
@@ -17,6 +18,13 @@ export interface TradingSession {
   timezoneOffset: number;
 }
 
+export interface SwitchAccountResponse {
+  dealingEnabled: boolean;
+  hasActiveDemoAccounts: boolean;
+  hasActiveLiveAccounts: boolean;
+  trailingStopsEnabled: boolean;
+}
+
 export class LoginAPI {
   static readonly URL = {
     REFRESH_TOKEN: `/session/refresh-token`,
@@ -26,38 +34,69 @@ export class LoginAPI {
   constructor(private readonly apiClient: AxiosInstance, private auth: Authorization) {}
 
   /**
-   * Creates a trading session, obtaining session tokens for subsequent API access.
+   * Creates a trading session, obtaining session tokens for subsequent API access. Please note that region-specific
+   * login restrictions may apply.
    *
    * @param username - Username
    * @param password - Password
    * @see https://labs.ig.com/rest-trading-api-reference/service-detail?id=534
    */
-  async createSession(username: string, password: string): Promise<TradingSession> {
+  async createSession(username?: string, password?: string): Promise<TradingSession> {
     delete this.auth.accessToken;
 
     const resource = LoginAPI.URL.SESSION;
     const response = await this.apiClient.post<TradingSession>(
       resource,
       {
-        identifier: username,
-        password,
+        identifier: this.auth.username || username,
+        password: this.auth.password || password,
       },
       {
         'axios-retry': {
           retries: 0,
         },
         headers: {
-          Version: '3',
+          VERSION: '3',
         },
       }
     );
 
     this.auth.accessToken = response.data.oauthToken.access_token;
-    this.auth.accountId = response.data.accountId;
     this.auth.refreshToken = response.data.oauthToken.refresh_token;
+
+    this.auth.accountId = response.data.accountId;
     this.auth.lightstreamerEndpoint = response.data.lightstreamerEndpoint;
 
     await this.getSessionToken();
+
+    return response.data;
+  }
+
+  /**
+   * Switches active accounts, optionally setting the default IG account (of type CFD or spreadbet), against which trades may be made.
+   *
+   * @param accountId - Account ID
+   * @see https://labs.ig.com/rest-trading-api-reference/service-detail?id=534
+   */
+  async switchAccount(accountId: string): Promise<SwitchAccountResponse> {
+    const resource = LoginAPI.URL.SESSION;
+    const response = await this.apiClient.put<SwitchAccountResponse>(
+      resource,
+      {
+        accountId: accountId,
+        defaultAccount: false,
+      },
+      {
+        'axios-retry': {
+          retries: 0,
+        },
+        headers: {
+          VERSION: '1',
+        },
+      }
+    );
+
+    this.auth.accountId = accountId;
 
     return response.data;
   }
@@ -76,6 +115,47 @@ export class LoginAPI {
   }
 
   /**
+   * Creates a session from predefined token values.
+   */
+  createSessionFromToken(securityToken: string, cst: string, accountId: string, lightstreamerEndpoint: string): void {
+    this.auth.accountId = accountId;
+    this.auth.clientSessionToken = cst;
+    this.auth.lightstreamerEndpoint = lightstreamerEndpoint;
+    this.auth.securityToken = securityToken;
+  }
+
+  /**
+   * Creates a session using the IG Mobile App API.
+   *
+   * WARNING: This endpoint only works with a production environment.
+   */
+  async createSessionFromMobileLogin(username: string, password: string): Promise<TradingSession> {
+    delete this.auth.accessToken;
+
+    const resource = 'https://api.ig.com/clientsecurity/session';
+    const response = await axios.post<TradingSession>(
+      resource,
+      {
+        enc: false,
+        password,
+        username: username,
+      },
+      {
+        'axios-retry': {
+          retries: 0,
+        },
+      }
+    );
+
+    this.auth.securityToken = response.headers['x-security-token'];
+    this.auth.clientSessionToken = response.headers.cst;
+    this.auth.accountId = response.data.accountId;
+    this.auth.lightstreamerEndpoint = response.data.lightstreamerEndpoint;
+
+    return response.data;
+  }
+
+  /**
    * Returns the user's session details.
    *
    * @see https://labs.ig.com/rest-trading-api-reference/service-detail?id=534
@@ -84,6 +164,15 @@ export class LoginAPI {
     const resource = LoginAPI.URL.SESSION + '?fetchSessionTokens=true';
     const response = await this.apiClient.get<TradingSession>(resource);
     return response.data;
+  }
+
+  async login(username: string, password: string): Promise<TradingSession> {
+    const isLive = this.apiClient.defaults.baseURL === APIClient.URL_LIVE;
+
+    if (isLive) {
+      return this.createSessionFromMobileLogin(username, password);
+    }
+    return this.createSession(username, password);
   }
 
   /**

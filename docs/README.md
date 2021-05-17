@@ -27,31 +27,30 @@ npm install ig-trading-api
 yarn add ig-trading-api
 ```
 
-## Setup
+## Usage
 
 You can set the API gateway, when initializing the API client. Use `APIClient.URL_DEMO` (demo-api.ig.com) for demo accounts and `APIClient.URL_LIVE` (api.ig.com) for live account access.
 
-**JavaScript / Node.js**
+### TypeScript
 
-```javascript
-const {APIClient} = require('ig-trading-api');
-const client = new APIClient(APIClient.URL_LIVE, 'your-api-key');
-```
-
-**TypeScript**
+Recommended:
 
 ```typescript
 import {APIClient} from 'ig-trading-api';
 const client = new APIClient(APIClient.URL_LIVE, 'your-api-key');
-```
-
-## Usage
-
-### Login
-
-```typescript
 const session = await client.rest.login.createSession('your-username', 'your-password');
 console.info(`Your client ID is "${session.clientId}".`);
+```
+
+Alternative:
+
+```typescript
+import {APIClient} from 'ig-trading-api';
+const client = new APIClient(APIClient.URL_LIVE, {
+  apiKey: 'your-api-key',
+  username: 'your-username',
+  password: 'your-password',
+});
 ```
 
 ## Resources
@@ -62,7 +61,7 @@ console.info(`Your client ID is "${session.clientId}".`);
 - [IG REST Trading API Limits](https://labs.ig.com/faq)
 - [Spreads, commissions and margins](https://www.ig.com/en/cfd-trading/charges-and-margins) ([in Germany](https://www.ig.com/de/hilfe-und-support/cfds/kosten-und-gebuehren/wie-lauten-die-produktinformationen-fuer-aktien-cfds#information-banner-dismiss))
 
-### IG instrument identifier (epic)
+### IG Instrument Identifier (Epic)
 
 Breakdown for "IX.D.DOW.DAILY.IP":
 
@@ -73,6 +72,14 @@ Breakdown for "IX.D.DOW.DAILY.IP":
 | DOW    | Underlying market               | "Dow Jones"                                                        |
 | DAILY  | Indicator for processing method | "Daily" funded bet                                                 |
 | IP     | Asset type                      | "Intellectual Property"                                            |
+
+Epics for testing:
+
+| Epic                | Name                | Environment | Trading Time           |
+| ------------------- | ------------------- | ----------- | ---------------------- |
+| ED.D.DHERGY.CASH.IP | Delivery Hero SE    | Live / Demo | Germany: 09:00 - 17:30 |
+| UC.D.MSFT.CASH.IP   | Microsoft Corp      | Live / Demo | Germany: 10:00 - 03:00 |
+| UA.D.COINUS.CASH.IP | Coinbase Global Inc | Live        | Germany: 15:30 - 22:00 |
 
 ## Development Setup
 

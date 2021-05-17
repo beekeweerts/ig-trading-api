@@ -1,3 +1,110 @@
+### 0.13.0 (2021-05-11)
+
+##### New Features
+
+- **client:** Automatically create trading session with username and password ([#169](https://github.com/bennycode/ig-trading-api/pull/169)) ([2cb80b39](https://github.com/bennycode/ig-trading-api/commit/2cb80b39db90a421761fce6b3e189ca70571df82))
+
+### 0.12.0 (2021-05-10)
+
+##### Chores
+
+- Update lockfile ([a6de4ba7](https://github.com/bennycode/ig-trading-api/commit/a6de4ba7a972e11dee9082d2d1ed452e5ee79d69))
+- Add auto-merge for dependency updates ([076a553a](https://github.com/bennycode/ig-trading-api/commit/076a553a14a4c18f448bb070e344d2afdc9926a4))
+- **deps-dev:**
+  - bump prettier from 2.2.1 to 2.3.0 ([#162](https://github.com/bennycode/ig-trading-api/pull/162)) ([4aa818a4](https://github.com/bennycode/ig-trading-api/commit/4aa818a4a0cfa7f4c20fd04178fafdfeda18b824))
+  - bump @typescript-eslint/parser from 4.22.0 to 4.22.1 ([#160](https://github.com/bennycode/ig-trading-api/pull/160)) ([4ca95329](https://github.com/bennycode/ig-trading-api/commit/4ca953294cdc749c512f8a687b92f3584bc4462e))
+  - bump @types/jasmine from 3.6.10 to 3.7.1 ([#161](https://github.com/bennycode/ig-trading-api/pull/161)) ([c5fa9dd9](https://github.com/bennycode/ig-trading-api/commit/c5fa9dd9412e0527c831ac5dd66ed2ce6106350b))
+  - bump @typescript-eslint/eslint-plugin ([#164](https://github.com/bennycode/ig-trading-api/pull/164)) ([6da4ed54](https://github.com/bennycode/ig-trading-api/commit/6da4ed547df40f81560f3ff37a9d269b1db3d129))
+  - bump typedoc-plugin-markdown from 3.7.2 to 3.8.0 ([#165](https://github.com/bennycode/ig-trading-api/pull/165)) ([a77fece9](https://github.com/bennycode/ig-trading-api/commit/a77fece982ad89431526e13ae25bafea67c60dea))
+  - bump eslint from 7.25.0 to 7.26.0 ([#166](https://github.com/bennycode/ig-trading-api/pull/166)) ([9e109189](https://github.com/bennycode/ig-trading-api/commit/9e109189911aae0131556de77033b988b66a2210))
+  - bump lint-staged from 10.5.4 to 11.0.0 ([#167](https://github.com/bennycode/ig-trading-api/pull/167)) ([ec730d5c](https://github.com/bennycode/ig-trading-api/commit/ec730d5c39b9a0dfa486e28c89cffdff1e4c5642))
+  - bump @types/jasmine from 3.6.9 to 3.6.10 ([#156](https://github.com/bennycode/ig-trading-api/pull/156)) ([0b48d28e](https://github.com/bennycode/ig-trading-api/commit/0b48d28e82f42658c2e4a6ba5282eb7aea9b4594))
+  - bump @types/luxon from 1.26.4 to 1.26.5 ([#158](https://github.com/bennycode/ig-trading-api/pull/158)) ([ab145235](https://github.com/bennycode/ig-trading-api/commit/ab14523594004d3b368827525406bae35e00cd82))
+- **deps:**
+  - bump @types/node from 15.0.1 to 15.0.2 ([#163](https://github.com/bennycode/ig-trading-api/pull/163)) ([33747c27](https://github.com/bennycode/ig-trading-api/commit/33747c277e4ddead841723021576ff87a96cad80))
+  - bump @types/node from 14.14.41 to 15.0.1 ([#157](https://github.com/bennycode/ig-trading-api/pull/157)) ([f68c307c](https://github.com/bennycode/ig-trading-api/commit/f68c307c8c42629a0b4c381c3d008c568174a1b2))
+
+##### Documentation Changes
+
+- Updated API ([37427df6](https://github.com/bennycode/ig-trading-api/commit/37427df6a2ae870d1d2878001d5a7b8e5e0e07cc))
+- Updated changelog ([a8e1c4a7](https://github.com/bennycode/ig-trading-api/commit/a8e1c4a7889cd065af6e7940457960d6a4d51268))
+- Describe array indices ([347b7086](https://github.com/bennycode/ig-trading-api/commit/347b7086ae164824ac2377d40050d026569a0ebe))
+
+##### New Features
+
+- **login:** Support login credentials in constructor ([#168](https://github.com/bennycode/ig-trading-api/pull/168)) ([119b153f](https://github.com/bennycode/ig-trading-api/commit/119b153fae689ed494919b31b3addaa60669df57))
+
+### 0.12.0 (2021-05-10)
+
+##### Chores
+
+- **deps-dev:**
+  - bump prettier from 2.2.1 to 2.3.0 ([#162](https://github.com/bennycode/ig-trading-api/pull/162)) ([4aa818a4](https://github.com/bennycode/ig-trading-api/commit/4aa818a4a0cfa7f4c20fd04178fafdfeda18b824))
+  - bump @typescript-eslint/parser from 4.22.0 to 4.22.1 ([#160](https://github.com/bennycode/ig-trading-api/pull/160)) ([4ca95329](https://github.com/bennycode/ig-trading-api/commit/4ca953294cdc749c512f8a687b92f3584bc4462e))
+  - bump @types/jasmine from 3.6.10 to 3.7.1 ([#161](https://github.com/bennycode/ig-trading-api/pull/161)) ([c5fa9dd9](https://github.com/bennycode/ig-trading-api/commit/c5fa9dd9412e0527c831ac5dd66ed2ce6106350b))
+  - bump @typescript-eslint/eslint-plugin ([#164](https://github.com/bennycode/ig-trading-api/pull/164)) ([6da4ed54](https://github.com/bennycode/ig-trading-api/commit/6da4ed547df40f81560f3ff37a9d269b1db3d129))
+  - bump typedoc-plugin-markdown from 3.7.2 to 3.8.0 ([#165](https://github.com/bennycode/ig-trading-api/pull/165)) ([a77fece9](https://github.com/bennycode/ig-trading-api/commit/a77fece982ad89431526e13ae25bafea67c60dea))
+  - bump eslint from 7.25.0 to 7.26.0 ([#166](https://github.com/bennycode/ig-trading-api/pull/166)) ([9e109189](https://github.com/bennycode/ig-trading-api/commit/9e109189911aae0131556de77033b988b66a2210))
+  - bump lint-staged from 10.5.4 to 11.0.0 ([#167](https://github.com/bennycode/ig-trading-api/pull/167)) ([ec730d5c](https://github.com/bennycode/ig-trading-api/commit/ec730d5c39b9a0dfa486e28c89cffdff1e4c5642))
+  - bump @types/jasmine from 3.6.9 to 3.6.10 ([#156](https://github.com/bennycode/ig-trading-api/pull/156)) ([0b48d28e](https://github.com/bennycode/ig-trading-api/commit/0b48d28e82f42658c2e4a6ba5282eb7aea9b4594))
+  - bump @types/luxon from 1.26.4 to 1.26.5 ([#158](https://github.com/bennycode/ig-trading-api/pull/158)) ([ab145235](https://github.com/bennycode/ig-trading-api/commit/ab14523594004d3b368827525406bae35e00cd82))
+- Add auto-merge for dependency updates ([076a553a](https://github.com/bennycode/ig-trading-api/commit/076a553a14a4c18f448bb070e344d2afdc9926a4))
+- **deps:**
+  - bump @types/node from 15.0.1 to 15.0.2 ([#163](https://github.com/bennycode/ig-trading-api/pull/163)) ([33747c27](https://github.com/bennycode/ig-trading-api/commit/33747c277e4ddead841723021576ff87a96cad80))
+  - bump @types/node from 14.14.41 to 15.0.1 ([#157](https://github.com/bennycode/ig-trading-api/pull/157)) ([f68c307c](https://github.com/bennycode/ig-trading-api/commit/f68c307c8c42629a0b4c381c3d008c568174a1b2))
+
+##### Documentation Changes
+
+- Describe array indices ([347b7086](https://github.com/bennycode/ig-trading-api/commit/347b7086ae164824ac2377d40050d026569a0ebe))
+
+##### New Features
+
+- **login:** Support login credentials in constructor ([#168](https://github.com/bennycode/ig-trading-api/pull/168)) ([119b153f](https://github.com/bennycode/ig-trading-api/commit/119b153fae689ed494919b31b3addaa60669df57))
+
+#### 0.11.1 (2021-04-27)
+
+##### Chores
+
+- **deps-dev:**
+  - bump eslint from 7.24.0 to 7.25.0 ([#151](https://github.com/bennycode/ig-trading-api/pull/151)) ([694d4815](https://github.com/bennycode/ig-trading-api/commit/694d4815a22d404660791a80401582ff0684ee00))
+  - bump typedoc from 0.20.35 to 0.20.36 ([#153](https://github.com/bennycode/ig-trading-api/pull/153)) ([1f98e6db](https://github.com/bennycode/ig-trading-api/commit/1f98e6db537c58bbd031cd435ec659a0f2dcaac4))
+  - bump eslint-config-prettier from 8.2.0 to 8.3.0 ([#152](https://github.com/bennycode/ig-trading-api/pull/152)) ([5060e40f](https://github.com/bennycode/ig-trading-api/commit/5060e40fb04ec74689f8329c20c69fadc15fa055))
+  - bump typedoc-plugin-markdown from 3.7.1 to 3.7.2 ([#154](https://github.com/bennycode/ig-trading-api/pull/154)) ([eac69382](https://github.com/bennycode/ig-trading-api/commit/eac6938264e20edb1921fede3ea36937dccd2e81))
+
+##### New Features
+
+- **login:** Switch active accounts ([#150](https://github.com/bennycode/ig-trading-api/pull/150)) ([b6d57e82](https://github.com/bennycode/ig-trading-api/commit/b6d57e82105187b985e2de373ae34550b0f5a2c0))
+
+##### Tests
+
+- Enforce 100% code coverage ([#155](https://github.com/bennycode/ig-trading-api/pull/155)) ([48060f10](https://github.com/bennycode/ig-trading-api/commit/48060f10f759cabb1b84c09d69a6fe64a34beceb))
+- Improve overall code coverage ([c000fdab](https://github.com/bennycode/ig-trading-api/commit/c000fdab4d415998fe12323dc2964fa8638b4822))
+
+### 0.11.0 (2021-04-22)
+
+##### Chores
+
+- **deps-dev:**
+  - bump @types/luxon from 1.26.3 to 1.26.4 ([#146](https://github.com/bennycode/ig-trading-api/pull/146)) ([bd8ca059](https://github.com/bennycode/ig-trading-api/commit/bd8ca059c57225b4e7a898e2dfd06d7ef20c7bb0))
+  - bump @typescript-eslint/parser from 4.21.0 to 4.22.0 ([#143](https://github.com/bennycode/ig-trading-api/pull/143)) ([8b96ffdb](https://github.com/bennycode/ig-trading-api/commit/8b96ffdbe8f34a81cacfde1d9d9bd4e5337f8907))
+  - bump eslint-plugin-prettier from 3.3.1 to 3.4.0 ([#145](https://github.com/bennycode/ig-trading-api/pull/145)) ([1490f8a7](https://github.com/bennycode/ig-trading-api/commit/1490f8a7d58b92e40ababd4a90964962cb3d7253))
+  - bump typedoc-plugin-markdown from 3.6.1 to 3.7.1 ([#144](https://github.com/bennycode/ig-trading-api/pull/144)) ([1b169719](https://github.com/bennycode/ig-trading-api/commit/1b1697192e539cbb940e8d54b73eb4610503d0ee))
+  - bump eslint-config-prettier from 8.1.0 to 8.2.0 ([#147](https://github.com/bennycode/ig-trading-api/pull/147)) ([e318517b](https://github.com/bennycode/ig-trading-api/commit/e318517be04b3e099ac07235d8628c0c5b819e73))
+  - bump @typescript-eslint/eslint-plugin ([#149](https://github.com/bennycode/ig-trading-api/pull/149)) ([18d9166c](https://github.com/bennycode/ig-trading-api/commit/18d9166c575e536b9d15f70ce582e6527d7d250c))
+- **deps:** bump @types/node from 14.14.37 to 14.14.41 ([#148](https://github.com/bennycode/ig-trading-api/pull/148)) ([ca2e611c](https://github.com/bennycode/ig-trading-api/commit/ca2e611c6e6e8dcae12bd0a2fc1b481e8794a7b5))
+- Update Codecov GitHub Action ([fba0f0e6](https://github.com/bennycode/ig-trading-api/commit/fba0f0e66b6679016e60e34af2c5eb7debd53d4c))
+
+##### Documentation Changes
+
+- Update trading times ([c406945b](https://github.com/bennycode/ig-trading-api/commit/c406945b140003f3d2c9df605f32ae6e73f990d1))
+
+##### New Features
+
+- **login:**
+  - Automatically select best login mechanism ([#142](https://github.com/bennycode/ig-trading-api/pull/142)) ([c028d7e0](https://github.com/bennycode/ig-trading-api/commit/c028d7e0e2bdfee649c3a36d414f846006238590))
+  - Add mobile login ([#141](https://github.com/bennycode/ig-trading-api/pull/141)) ([7ea05c73](https://github.com/bennycode/ig-trading-api/commit/7ea05c73160fd1ba20d1c66c825afdacbfac437d))
+- Don't retry login & logout requests ([#140](https://github.com/bennycode/ig-trading-api/pull/140)) ([9b39bddd](https://github.com/bennycode/ig-trading-api/commit/9b39bdddcb3d972c244fb7a835070e1a2207db9d))
+
 #### 0.10.1 (2021-04-14)
 
 ##### Bug Fixes

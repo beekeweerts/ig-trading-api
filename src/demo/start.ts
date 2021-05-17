@@ -1,4 +1,4 @@
-import {initClient} from '../demo/initClient';
+import {initClient} from './initClient';
 import {APIClient} from '../APIClient';
 
 declare global {
@@ -14,4 +14,7 @@ async function main(): Promise<void> {
   global.IGClient = client;
 }
 
-main().catch(console.error);
+main().catch(error => {
+  console.error(error);
+  process.exit(1);
+});

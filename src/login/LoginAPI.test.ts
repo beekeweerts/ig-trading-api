@@ -1,7 +1,7 @@
 import nock from 'nock';
 import {APIClient} from '../APIClient';
 import {DealingAPI} from '../dealing/DealingAPI';
-import {LoginAPI} from './LoginAPI';
+import {LoginAPI, TradingSession} from './LoginAPI';
 
 describe('LoginAPI', () => {
   describe('createSession', () => {
@@ -70,6 +70,94 @@ describe('LoginAPI', () => {
 
       const deleteOrder = await global.client.rest.dealing.deleteOrder(dealId);
       expect(deleteOrder.dealReference).toBe('54321');
+
+      nock(APIClient.URL_DEMO)
+        .put(LoginAPI.URL.SESSION)
+        .query(true)
+        .reply(
+          200,
+          JSON.stringify({
+            dealingEnabled: true,
+            hasActiveDemoAccounts: true,
+            hasActiveLiveAccounts: true,
+            trailingStopsEnabled: false,
+          })
+        );
+
+      const switchAccountResponse = await global.client.rest.login.switchAccount('ABC124');
+      expect(switchAccountResponse.dealingEnabled).toBe(true);
+      expect(switchAccountResponse.hasActiveDemoAccounts).toBe(true);
+      expect(switchAccountResponse.hasActiveLiveAccounts).toBe(true);
+      expect(switchAccountResponse.trailingStopsEnabled).toBe(false);
+    });
+
+    it('uses already existing credentials', async () => {
+      const username = 'top';
+      const password = 'secret';
+
+      nock(APIClient.URL_DEMO)
+        .post(LoginAPI.URL.SESSION)
+        .query(true)
+        .reply(200, (_: string, requestBody: Record<string, any>) => {
+          expect(requestBody.identifier).toBe(username);
+          expect(requestBody.password).toBe(password);
+          return JSON.stringify({
+            accountId: 'ABC123',
+            clientId: '133721337',
+            lightstreamerEndpoint: 'https://demo-apd.marketdatasystems.com',
+            oauthToken: {
+              access_token: '6ba8e2bd-1337-40e5-9299-68f60474f986',
+              expires_in: '60',
+              refresh_token: '83c056b8-1337-46d3-821d-92a1dffd7f1e',
+              scope: 'profile',
+              token_type: 'Bearer',
+            },
+            timezoneOffset: 1,
+          });
+        });
+
+      const apiClient = new APIClient(APIClient.URL_DEMO, {
+        apiKey: '123',
+        password,
+        username,
+      });
+      const getSessionToken = spyOn<LoginAPI>(apiClient.rest.login, 'getSessionToken').and.callFake(() =>
+        Promise.resolve(true)
+      );
+      await apiClient.rest.login.createSession();
+      expect(getSessionToken).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('setupSessionWithToken', () => {
+    it('setup a session with predefined values', async () => {
+      global.client.rest.login.createSessionFromToken('1234', '4321', '1111', '4444');
+      expect(global.client.rest.auth.securityToken).toBe('1234');
+      expect(global.client.rest.auth.clientSessionToken).toBe('4321');
+      expect(global.client.rest.auth.accountId).toBe('1111');
+      expect(global.client.rest.auth.lightstreamerEndpoint).toBe('4444');
+    });
+  });
+
+  describe('createMobileSession', () => {
+    it('create a mobile session', async () => {
+      nock('https://api.ig.com/')
+        .post('/clientsecurity/session')
+        .reply(
+          200,
+          JSON.stringify({
+            accountId: 'XYZ123',
+            lightstreamerEndpoint: 'https://demo-apd.marketdatasystems.com',
+          }),
+          {
+            cst: 'cst',
+            'x-security-token': 'securityToken',
+          }
+        );
+
+      const session = await global.client.rest.login.createSessionFromMobileLogin('username', 'password');
+      expect(session.accountId).toBe('XYZ123');
+      expect(global.client.rest.auth.securityToken).toBe('securityToken');
     });
   });
 
@@ -158,6 +246,26 @@ describe('LoginAPI', () => {
       nock(APIClient.URL_DEMO).delete(LoginAPI.URL.SESSION).reply(200);
 
       await global.client.rest.login.logout();
+    });
+  });
+
+  describe('login', () => {
+    it('selects the mobile login when using a live account', async () => {
+      const apiClient = new APIClient(APIClient.URL_LIVE, '123');
+      const mobileLogin = spyOn<LoginAPI>(apiClient.rest.login, 'createSessionFromMobileLogin').and.callFake(() =>
+        Promise.resolve({} as TradingSession)
+      );
+      await apiClient.rest.login.login('username', 'password');
+      expect(mobileLogin).toHaveBeenCalledTimes(1);
+    });
+
+    it('selects the standard login when using a demo account', async () => {
+      const apiClient = new APIClient(APIClient.URL_DEMO, '123');
+      const standardLogin = spyOn<LoginAPI>(apiClient.rest.login, 'createSession').and.callFake(() =>
+        Promise.resolve({} as TradingSession)
+      );
+      await apiClient.rest.login.login('username', 'password');
+      expect(standardLogin).toHaveBeenCalledTimes(1);
     });
   });
 });
